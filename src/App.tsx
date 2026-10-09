@@ -1,7 +1,59 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
+import puzzleImage from './assets/hero.png'
 import './App.css'
 
-// Render the draw controls, name grid, and selection dialogs.
+type PuzzleDifficulty = 'easy' | 'notEasy'
+
+type Puzzle = {
+  category: string
+  answer: string
+  image: string
+  imageDescription: string
+}
+
+type PuzzleProgress = {
+  categoryShown: boolean
+  revealedLetters: number[]
+}
+
+type PuzzleSession = {
+  currentPuzzleIndex: number
+  progressByPuzzle: Record<number, PuzzleProgress>
+}
+
+// Add puzzle entries here to expand either difficulty's puzzle collection.
+const puzzlesByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
+  easy: [
+    {
+      category: 'Design',
+      answer: 'LAYER',
+      image: puzzleImage,
+      imageDescription: 'Two offset layers stacked on top of one another',
+    },
+    {
+      category: 'Design',
+      answer: 'LAYERING',
+      image: puzzleImage,
+      imageDescription: 'Two offset layers stacked on top of one another',
+    },
+  ],
+  notEasy: [
+    {
+      category: 'Design concept',
+      answer: 'STACK',
+      image: puzzleImage,
+      imageDescription: 'Two offset layers stacked on top of one another',
+    },
+    {
+      category: 'Design concept',
+      answer: 'STACKER',
+      image: puzzleImage,
+      imageDescription: 'Two offset layers stacked on top of one another',
+    },
+  ],
+}
+
+// Render the draw controls, name grid, selection dialogs, and puzzle modals.
 function App() {
   const [names, setNames] = useState<string[]>([])
   const [activeIndex, setActiveIndex] = useState(0)
@@ -10,6 +62,11 @@ function App() {
   const [screenName, setScreenName] = useState('')
   const [showFileDialog, setShowFileDialog] = useState(true)
   const [isRolling, setIsRolling] = useState(false)
+  const [activePuzzleDifficulty, setActivePuzzleDifficulty] = useState<PuzzleDifficulty | null>(null)
+  const [puzzleSessions, setPuzzleSessions] = useState<Record<PuzzleDifficulty, PuzzleSession>>({
+    easy: { currentPuzzleIndex: 0, progressByPuzzle: {} },
+    notEasy: { currentPuzzleIndex: 0, progressByPuzzle: {} },
+  })
   const wheelWindowRef = useRef<HTMLDivElement | null>(null)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -89,6 +146,52 @@ function App() {
     setSelectedIndex(null)
   }
 
+  // Open a difficulty's puzzle modal without resetting its saved session.
+  function openPuzzle(difficulty: PuzzleDifficulty) {
+    setActivePuzzleDifficulty(difficulty)
+  }
+
+  // Move between puzzles while keeping each puzzle's revealed hints.
+  function movePuzzle(difficulty: PuzzleDifficulty, direction: -1 | 1) {
+    const puzzleCount = puzzlesByDifficulty[difficulty].length
+    setPuzzleSessions((sessions) => ({
+      ...sessions,
+      [difficulty]: {
+        ...sessions[difficulty],
+        currentPuzzleIndex: Math.max(
+          0,
+          Math.min(puzzleCount - 1, sessions[difficulty].currentPuzzleIndex + direction),
+        ),
+      },
+    }))
+  }
+
+  // Reveal the category or a chosen answer letter for the active puzzle.
+  function revealPuzzleHint(
+    difficulty: PuzzleDifficulty,
+    puzzleIndex: number,
+    update: (progress: PuzzleProgress) => PuzzleProgress,
+  ) {
+    setPuzzleSessions((sessions) => {
+      const session = sessions[difficulty]
+      const currentProgress = session.progressByPuzzle[puzzleIndex] ?? {
+        categoryShown: false,
+        revealedLetters: [],
+      }
+
+      return {
+        ...sessions,
+        [difficulty]: {
+          ...session,
+          progressByPuzzle: {
+            ...session.progressByPuzzle,
+            [puzzleIndex]: update(currentProgress),
+          },
+        },
+      }
+    })
+  }
+
   // Advance through cells in row-major order, slowing down before the winner.
   function pickRandom() {
     if (isRolling || names.length === 0) return
@@ -99,9 +202,16 @@ function App() {
     const winnerIndex = Math.floor(Math.random() * names.length)
     const distanceToWinner = (winnerIndex - activeIndex + names.length) % names.length
     const totalSteps = names.length * 2 + distanceToWinner
+    const delayCount = Math.max(0, totalSteps - 1)
+    let totalWeight = 0
+    for (let step = 1; step <= delayCount; step += 1) {
+      const progress = step / totalSteps
+      totalWeight += 0.5 + 1.5 * progress * progress
+    }
     let stepsTaken = 0
     let currentIndex = activeIndex
 
+    // Advance in grid order, distributing all remaining delays across two seconds.
     function advance() {
       currentIndex = (currentIndex + 1) % names.length
       stepsTaken += 1
@@ -116,7 +226,7 @@ function App() {
       }
 
       const progress = stepsTaken / totalSteps
-      const delay = 45 + 255 * progress * progress
+      const delay = 2000 * (0.5 + 1.5 * progress * progress) / totalWeight
       timeoutRef.current = setTimeout(advance, delay)
     }
 
@@ -210,8 +320,8 @@ function App() {
 
         {/* Puzzle choices sit directly below the name grid. */}
         <div className="puzzle-actions" aria-label="Puzzle options">
-          <button type="button">Show Easy Puzzle</button>
-          <button type="button">Show Not-Easy Puzzle</button>
+          <button type="button" onClick={() => openPuzzle('easy')}>Show Easy Puzzle</button>
+          <button type="button" onClick={() => openPuzzle('notEasy')}>Show Not-Easy Puzzle</button>
         </div>
 
         {/* Proceeded selections remain visible until removed from the screen. */}
@@ -263,6 +373,88 @@ function App() {
           </section>
         </div>
       )}
+
+      {/* Puzzle modal shows difficulty-specific progress and image clues. */}
+      {activePuzzleDifficulty && (() => {
+        const difficulty = activePuzzleDifficulty
+        const session = puzzleSessions[difficulty]
+        const puzzleIndex = session.currentPuzzleIndex
+        const puzzle = puzzlesByDifficulty[difficulty][puzzleIndex]
+        const progress = session.progressByPuzzle[puzzleIndex] ?? {
+          categoryShown: false,
+          revealedLetters: [],
+        }
+
+        return (
+          <div className="modal-backdrop puzzle-backdrop" role="presentation" onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setActivePuzzleDifficulty(null)
+          }}>
+            <section className="dialog puzzle-dialog" role="dialog" aria-modal="true" aria-labelledby="puzzle-title">
+              <button className="dialog-close" type="button" onClick={() => setActivePuzzleDifficulty(null)} aria-label="Close puzzle">×</button>
+              <div className="puzzle-heading">
+                <span className="dialog-kicker">{difficulty === 'easy' ? 'EASY PUZZLE' : 'NOT-EASY PUZZLE'}</span>
+                <span className="puzzle-number">PUZZLE {String(puzzleIndex + 1).padStart(2, '0')} / {String(puzzlesByDifficulty[difficulty].length).padStart(2, '0')}</span>
+              </div>
+              <h2 id="puzzle-title">What is this <em>word?</em></h2>
+              <div className="puzzle-image-frame">
+                <img src={puzzle.image} alt={puzzle.imageDescription} />
+              </div>
+              <div className="puzzle-hints">
+                <button
+                  type="button"
+                  onClick={() => revealPuzzleHint(difficulty, puzzleIndex, (current) => ({ ...current, categoryShown: true }))}
+                  disabled={progress.categoryShown}
+                >
+                  {progress.categoryShown ? 'Category Shown' : 'Show Category'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => revealPuzzleHint(difficulty, puzzleIndex, (current) => ({
+                    ...current,
+                    revealedLetters: Array.from({ length: puzzle.answer.length }, (_, index) => index),
+                  }))}
+                  disabled={progress.revealedLetters.length === puzzle.answer.length}
+                >
+                  {progress.revealedLetters.length === puzzle.answer.length ? 'Answer Revealed' : 'Reveal Answer'}
+                </button>
+              </div>
+              {progress.categoryShown && <p className="puzzle-category">Category: <strong>{puzzle.category}</strong></p>}
+              <div className="answer-blocks" aria-label="Answer letters">
+                {Array.from(puzzle.answer).map((letter, index) => (
+                  <button
+                    className="answer-block"
+                    key={`${puzzleIndex}-${index}`}
+                    type="button"
+                    aria-label={progress.revealedLetters.includes(index) ? `Letter ${index + 1}: ${letter}` : `Reveal letter ${index + 1}`}
+                    onClick={() => revealPuzzleHint(difficulty, puzzleIndex, (current) => ({
+                      ...current,
+                      revealedLetters: current.revealedLetters.includes(index)
+                        ? current.revealedLetters
+                        : [...current.revealedLetters, index],
+                    }))}
+                  >
+                    {progress.revealedLetters.includes(index) ? letter : ''}
+                  </button>
+                ))}
+              </div>
+              <div className="puzzle-navigation">
+                <button
+                  type="button"
+                  aria-label="Previous puzzle"
+                  onClick={() => movePuzzle(difficulty, -1)}
+                  disabled={puzzleIndex === 0}
+                >←</button>
+                <button
+                  type="button"
+                  aria-label="Next puzzle"
+                  onClick={() => movePuzzle(difficulty, 1)}
+                  disabled={puzzleIndex === puzzlesByDifficulty[difficulty].length - 1}
+                >→</button>
+              </div>
+            </section>
+          </div>
+        )
+      })()}
     </main>
   )
 }
