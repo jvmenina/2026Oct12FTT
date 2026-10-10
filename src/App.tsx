@@ -141,8 +141,39 @@ const mechanicsSlides: MechanicsSlide[] = [
   },
 ]
 
+const PUZZLE_SHUFFLE_SEED = 'PicSolve-2026-10-12-++-'
+
+function createSeededRandom(seed: string) {
+  let state = 2166136261
+  for (const character of seed) {
+    state = Math.imul(state ^ character.charCodeAt(0), 16777619)
+  }
+
+  return () => {
+    state += 0x6D2B79F5
+    let value = state
+    value = Math.imul(value ^ (value >>> 15), value | 1)
+    value ^= value + Math.imul(value ^ (value >>> 7), value | 61)
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+function shufflePuzzles(puzzles: Puzzle[], seed: string): Puzzle[] {
+  const shuffled = [...puzzles]
+  const random = createSeededRandom(seed)
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1))
+    const puzzle = shuffled[index]
+    shuffled[index] = shuffled[swapIndex]
+    shuffled[swapIndex] = puzzle
+  }
+
+  return shuffled
+}
+
 // Add puzzle entries here to expand either difficulty's puzzle collection.
-const puzzlesByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
+const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
   easy: [
     {
       category: 'Popular Phrase, Person or People',
@@ -219,7 +250,7 @@ const puzzlesByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
     {
       category: 'Music, History, Education',
       answer: 'Classical',
-      hint: 'A long-established style of orchestral music.',
+      hint: 'A long-established style of orchestral music or the golden age of Greece.',
       image: fp1wClassical,
     },
     {
@@ -257,7 +288,7 @@ const puzzlesByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
     {
       category: 'Place, Activity',
       answer: 'Bank',
-      hint: 'A place to deposit money, or the land beside a river.',
+      hint: 'A place to deposit money, the land beside a river, or what happens when a plane tilts and rolls to turn in the air.',
       image: fp1wBank,
     },
     {
@@ -327,6 +358,11 @@ const puzzlesByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       image: rpForOnceInMyLife,
     },
   ],
+}
+
+const puzzlesByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
+  easy: shufflePuzzles(puzzleListsByDifficulty.easy, `${PUZZLE_SHUFFLE_SEED}:easy`),
+  notEasy: shufflePuzzles(puzzleListsByDifficulty.notEasy, `${PUZZLE_SHUFFLE_SEED}:notEasy`),
 }
 
 // Render the draw controls, name grid, selection dialogs, and puzzle modals.
