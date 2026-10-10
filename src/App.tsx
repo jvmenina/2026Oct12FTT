@@ -7,11 +7,13 @@ type PuzzleDifficulty = 'easy' | 'notEasy'
 type Puzzle = {
   category: string
   answer: string
+  hint: string
   image: string
   imageDescription?: string
 }
 
 type PuzzleProgress = {
+  hintShown: boolean
   categoryShown: boolean
   revealedLetters: number[]
 }
@@ -27,76 +29,91 @@ const puzzlesByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
     {
       category: 'Popular Phrase, Person or People',
       answer: 'BAD INFLUENCE',
+      hint: 'A person who encourages someone to make poor choices.',
       image: puzzleImage,
     },
     {
       category: 'Food',
       answer: 'SCRAMBLED EGGS',
+      hint: 'A breakfast dish made by stirring eggs as they cook.',
       image: puzzleImage,
     },
     {
       category: 'Popular Phrase, Country',
       answer: 'MADE IN CHINA',
+      hint: 'A label often found on products imported from overseas.',
       image: puzzleImage,
     },
     {
       category: 'Popular Phrase',
       answer: 'READ BETWEEN THE LINES',
+      hint: 'Look for a meaning that is implied rather than stated.',
       image: puzzleImage,
     },
     {
       category: 'Food',
       answer: 'Trail Mix',
+      hint: 'A portable snack often made with nuts and dried fruit.',
       image: puzzleImage,
     },
     {
       category: 'Popular Phrase',
       answer: 'REPEAT AFTER ME',
+      hint: 'Say the same words immediately after someone else.',
       image: puzzleImage,
     },
     {
       category: 'Popular Phrase, Science, Tool',
       answer: 'MICROSCOPE',
+      hint: 'A tool that makes very small things easier to see.',
       image: puzzleImage,
     },
     {
       category: 'Popular Phrase, Verb',
       answer: 'Update',
+      hint: 'Bring something up to date with the latest information.',
       image: puzzleImage,
     },
     {
       category: 'Nature, Tree',
       answer: 'Oak',
+      hint: 'A sturdy tree that produces acorns.',
       image: puzzleImage,
     },
     {
       category: 'Noun, Workplaces',
       answer: 'Safety',
+      hint: 'The condition of being protected from danger at work.',
       image: puzzleImage,
     },
     {
       category: 'Countries',
       answer: 'Britain',
+      hint: 'An island nation that includes England, Scotland, and Wales.',
       image: puzzleImage,
     },
     {
       category: 'Music, Social State, Wellness',
       answer: 'Harmony',
+      hint: 'A pleasing combination of musical notes or people working well together.',
       image: puzzleImage,
     },
     {
       category: 'Music, History, Education',
       answer: 'Classical',
+      hint: 'A long-established style of orchestral music.',
       image: puzzleImage,
     },
     {
       category: 'Color',
       answer: 'Pink',
+      hint: 'A light tint commonly associated with roses and flamingos.',
       image: puzzleImage,
     },
     {
       category: 'Place, Activity',
       answer: 'Pool',
+      hint: 'A place to swim, or a game played with cues and balls.',
       image: puzzleImage,
     },
   ],
@@ -104,76 +121,91 @@ const puzzlesByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
     {
       category: 'Religion, Spirituality, Mantra',
       answer: 'Om',
+      hint: 'A sacred sound often chanted during meditation.',
       image: puzzleImage,
     },
     {
       category: 'Activity',
       answer: 'Hobby',
+      hint: 'A pastime someone enjoys in their free time.',
       image: puzzleImage,
     },
     {
       category: 'Adjective',
       answer: 'Jagged',
+      hint: 'Having rough, sharp, uneven edges.',
       image: puzzleImage,
     },
     {
       category: 'Place, Activity',
       answer: 'Bank',
+      hint: 'A place to deposit money, or the land beside a river.',
       image: puzzleImage,
     },
     {
       category: 'Person or People, Math, Activity',
       answer: 'Figure',
+      hint: 'A person, a numerical result, or the act of working something out.',
       image: puzzleImage,
     },
     {
       category: 'Activity, Workplaces, Medicine',
       answer: 'Apply',
+      hint: 'Put something to use, or formally request a job.',
       image: puzzleImage,
     },
     {
       category: 'Food',
       answer: 'Fillet',
+      hint: 'A boneless cut of meat or fish.',
       image: puzzleImage,
     },
     {
       category: 'Activity',
       answer: 'Move',
+      hint: 'Change position or location.',
       image: puzzleImage,
     },
     {
       category: 'Noun, Signages',
       answer: 'Neon Lights',
+      hint: 'Bright glowing signs often seen outside shops.',
       image: puzzleImage,
     },
     {
       category: 'Popular Phrase, Food',
       answer: 'Balanced Diet',
+      hint: 'A way of eating that includes a healthy range of foods.',
       image: puzzleImage,
     },
     {
       category: 'Popular Phrase, Activity',
       answer: 'Free For All',
+      hint: 'A chaotic contest with few rules or restrictions.',
       image: puzzleImage,
     },
     {
       category: 'Science, Medicine',
       answer: 'Forensics',
+      hint: 'Scientific methods used to investigate crimes.',
       image: puzzleImage,
     },
     {
       category: 'Nature',
       answer: 'Summer',
+      hint: 'The warmest season of the year in many regions.',
       image: puzzleImage,
     },
     {
       category: 'VERY Popular Phrase',
       answer: 'Excuse Me',
+      hint: 'A polite phrase used to get attention or apologize.',
       image: puzzleImage,
     },
     {
       category: 'Popular Phrase',
       answer: 'For Once in my Life',
+      hint: 'A phrase about something happening at least one time.',
       image: puzzleImage,
     },
   ],
@@ -301,6 +333,7 @@ function App() {
     setPuzzleSessions((sessions) => {
       const session = sessions[difficulty]
       const currentProgress = session.progressByPuzzle[puzzleIndex] ?? {
+        hintShown: false,
         categoryShown: false,
         revealedLetters: [],
       }
@@ -500,16 +533,19 @@ function App() {
         </div>
       )}
 
-      {/* Puzzle modal shows difficulty-specific progress and image clues. */}
+      {/* Difficulty-specific puzzle modal keeps hint and answer progress when reopened. */}
       {activePuzzleDifficulty && (() => {
         const difficulty = activePuzzleDifficulty
         const session = puzzleSessions[difficulty]
         const puzzleIndex = session.currentPuzzleIndex
         const puzzle = puzzlesByDifficulty[difficulty][puzzleIndex]
         const progress = session.progressByPuzzle[puzzleIndex] ?? {
+          hintShown: false,
           categoryShown: false,
           revealedLetters: [],
         }
+        const answerWords = puzzle.answer.toUpperCase().split(' ')
+        let answerIndex = 0
 
         return (
           <div className="modal-backdrop puzzle-backdrop" role="presentation" onMouseDown={(event) => {
@@ -517,52 +553,58 @@ function App() {
           }}>
             <section className="dialog puzzle-dialog" role="dialog" aria-modal="true" aria-labelledby="puzzle-title">
               <button className="dialog-close" type="button" onClick={() => setActivePuzzleDifficulty(null)} aria-label="Close puzzle">×</button>
+              {/* Puzzle identity stays fixed while the clue and answer area scrolls. */}
               <div className="puzzle-heading">
                 <span className="dialog-kicker">{difficulty === 'easy' ? 'EASY PUZZLE' : 'NOT-EASY PUZZLE'}</span>
                 <span className="puzzle-number">PUZZLE {String(puzzleIndex + 1).padStart(2, '0')} / {String(puzzlesByDifficulty[difficulty].length).padStart(2, '0')}</span>
+                <h2 id="puzzle-title">What is this <em>word?</em></h2>
               </div>
-              <h2 id="puzzle-title">What is this <em>word?</em></h2>
-              <div className="puzzle-image-frame">
-                <img src={puzzle.image} alt={puzzle.imageDescription ?? "Puzzle"} />
+              {/* Image, word-grouped letter tiles, and hints share the scrollable area. */}
+              <div className="puzzle-content">
+                <div className="puzzle-image-frame">
+                  <img src={puzzle.image} alt={puzzle.imageDescription ?? 'Puzzle'} />
+                </div>
+                <div className="answer-blocks" aria-label="Answer letters">
+                  {answerWords.map((word, wordIndex) => {
+                    const firstLetterIndex = answerIndex
+                    answerIndex += word.length + 1
+
+                    return (
+                      <div className="answer-word" key={`${puzzleIndex}-${wordIndex}`}>
+                        {Array.from(word).map((letter, letterOffset) => {
+                          const index = firstLetterIndex + letterOffset
+                          const isRevealed = progress.revealedLetters.includes(index)
+
+                          return (
+                            <button
+                              className="answer-block"
+                              key={`${puzzleIndex}-${index}`}
+                              type="button"
+                              aria-label={isRevealed ? `Letter ${index + 1}: ${letter}` : `Reveal letter ${index + 1}`}
+                              onClick={() => revealPuzzleHint(difficulty, puzzleIndex, (current) => ({
+                                ...current,
+                                revealedLetters: current.revealedLetters.includes(index)
+                                  ? current.revealedLetters
+                                  : [...current.revealedLetters, index],
+                              }))}
+                            >
+                              {isRevealed ? letter : ''}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    )
+                  })}
+                </div>
+                {/* Custom and category clues appear together in a compact two-column display. */}
+                {(progress.hintShown || progress.categoryShown) && (
+                  <div className="puzzle-hint-display" aria-live="polite">
+                    {progress.hintShown && <p><span>HINT</span>{puzzle.hint}</p>}
+                    {progress.categoryShown && <p><span>CATEGORY</span>{puzzle.category}</p>}
+                  </div>
+                )}
               </div>
-              <div className="puzzle-hints">
-                <button
-                  type="button"
-                  onClick={() => revealPuzzleHint(difficulty, puzzleIndex, (current) => ({ ...current, categoryShown: true }))}
-                  disabled={progress.categoryShown}
-                >
-                  {progress.categoryShown ? 'Category Shown' : 'Show Category'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => revealPuzzleHint(difficulty, puzzleIndex, (current) => ({
-                    ...current,
-                    revealedLetters: Array.from({ length: puzzle.answer.length }, (_, index) => index),
-                  }))}
-                  disabled={progress.revealedLetters.length === puzzle.answer.length}
-                >
-                  {progress.revealedLetters.length === puzzle.answer.length ? 'Answer Revealed' : 'Reveal Answer'}
-                </button>
-              </div>
-              {progress.categoryShown && <p className="puzzle-category">Category: <strong>{puzzle.category}</strong></p>}
-              <div className="answer-blocks" aria-label="Answer letters">
-                {Array.from(puzzle.answer).map((letter, index) => (
-                  <button
-                    className="answer-block"
-                    key={`${puzzleIndex}-${index}`}
-                    type="button"
-                    aria-label={progress.revealedLetters.includes(index) ? `Letter ${index + 1}: ${letter}` : `Reveal letter ${index + 1}`}
-                    onClick={() => revealPuzzleHint(difficulty, puzzleIndex, (current) => ({
-                      ...current,
-                      revealedLetters: current.revealedLetters.includes(index)
-                        ? current.revealedLetters
-                        : [...current.revealedLetters, index],
-                    }))}
-                  >
-                    {progress.revealedLetters.includes(index) ? letter : ''}
-                  </button>
-                ))}
-              </div>
+              {/* Navigation and hint actions stay visible below the scrollable puzzle content. */}
               <div className="puzzle-navigation">
                 <button
                   type="button"
@@ -570,6 +612,32 @@ function App() {
                   onClick={() => movePuzzle(difficulty, -1)}
                   disabled={puzzleIndex === 0}
                 >←</button>
+                <div className="puzzle-hints">
+                  <button
+                    type="button"
+                    onClick={() => revealPuzzleHint(difficulty, puzzleIndex, (current) => ({ ...current, hintShown: true }))}
+                    disabled={progress.hintShown}
+                  >
+                    {progress.hintShown ? 'Hint Shown' : 'Show Hint'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => revealPuzzleHint(difficulty, puzzleIndex, (current) => ({ ...current, categoryShown: true }))}
+                    disabled={progress.categoryShown}
+                  >
+                    {progress.categoryShown ? 'Category Shown' : 'Show Category'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => revealPuzzleHint(difficulty, puzzleIndex, (current) => ({
+                      ...current,
+                      revealedLetters: Array.from({ length: puzzle.answer.length }, (_, index) => index),
+                    }))}
+                    disabled={progress.revealedLetters.length === puzzle.answer.length}
+                  >
+                    {progress.revealedLetters.length === puzzle.answer.length ? 'Answer Revealed' : 'Reveal Answer'}
+                  </button>
+                </div>
                 <button
                   type="button"
                   aria-label="Next puzzle"
