@@ -200,10 +200,10 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       image: rpReadBetween,
     },
     {
-      category: 'Food',
-      answer: 'Trail Mix',
-      hint: 'A portable snack often made with nuts and dried fruit.',
-      image: rpTrailMix,
+      category: 'Activity, Workplaces, Medicine',
+      answer: 'Apply',
+      hint: 'Put something to use, or formally request a job.',
+      image: fp1wApply,
     },
     {
       category: 'Popular Phrase',
@@ -242,16 +242,16 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       image: fp1wBritain,
     },
     {
-      category: 'Music, Social State, Wellness',
-      answer: 'Harmony',
-      hint: 'A pleasing combination of musical notes or people working well together.',
-      image: fp1wHarmony,
+      category: 'Activity',
+      answer: 'Hobby',
+      hint: 'A pastime someone enjoys in their free time.',
+      image: fp1wHobby,
     },
     {
-      category: 'Music, History, Education',
-      answer: 'Classical',
-      hint: 'A long-established style of orchestral music or the golden age of Greece.',
-      image: fp1wClassical,
+      category: 'Activity',
+      answer: 'Move',
+      hint: 'Change position or location.',
+      image: fp1wMove,
     },
     {
       category: 'Color',
@@ -274,10 +274,10 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       image: fp1wOm,
     },
     {
-      category: 'Activity',
-      answer: 'Hobby',
-      hint: 'A pastime someone enjoys in their free time.',
-      image: fp1wHobby,
+      category: 'Music, Social State, Wellness',
+      answer: 'Harmony',
+      hint: 'A pleasing combination of musical notes or people working well together.',
+      image: fp1wHarmony,
     },
     {
       category: 'Adjective',
@@ -298,10 +298,10 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       image: fp1wFigure,
     },
     {
-      category: 'Activity, Workplaces, Medicine',
-      answer: 'Apply',
-      hint: 'Put something to use, or formally request a job.',
-      image: fp1wApply,
+      category: 'Food',
+      answer: 'Trail Mix',
+      hint: 'A portable snack often made with nuts and dried fruit.',
+      image: rpTrailMix,
     },
     {
       category: 'Food',
@@ -310,10 +310,10 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       image: fp1wFillet,
     },
     {
-      category: 'Activity',
-      answer: 'Move',
-      hint: 'Change position or location.',
-      image: fp1wMove,
+      category: 'Music, History, Education',
+      answer: 'Classical',
+      hint: 'A long-established style of orchestral music or the golden age of Greece.',
+      image: fp1wClassical,
     },
     {
       category: 'Noun, Signages',
@@ -573,7 +573,7 @@ function App() {
       }
 
       const progress = stepsTaken / totalSteps
-      const delay = 2000 * (0.5 + 1.5 * progress * progress) / totalWeight
+      const delay = 4000 * (0.5 + 1.5 * progress * progress) / totalWeight
       timeoutRef.current = setTimeout(advance, delay)
     }
 

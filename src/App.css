@@ -536,7 +536,9 @@ div:has(> .mechanics-game-title) { display: flex; height: 100%;  flex-direction:
   text-align: center;
 }
 
-.puzzle-heading { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding-right: 24px; }
+.puzzle-heading { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; position: relative; }
+.puzzle-heading .dialog-kicker, .puzzle-heading .puzzle-number { position: absolute; }
+.puzzle-heading .puzzle-number { right: 0; }
 .puzzle-number { color: #89857a; font: 700 15px var(--mono); letter-spacing: 1px; }
 .puzzle-dialog h2 { width: 100%; flex: 0 0 100%; margin: 15px 0 18px; font-size: 28px; }
 .puzzle-content { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
