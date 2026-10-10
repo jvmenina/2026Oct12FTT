@@ -662,9 +662,11 @@ function App() {
           <div className="wheel-hint">
             {isRolling
               ? 'PICKING NEXT PLAYER...'
-              : names.length
-                ? 'READY TO PICK A PLAYER'
-                : 'LOAD A LIST TO BEGIN'}
+              : screenName.length
+                ? 'PICK A PUZZLE DIFFICULTY'
+                : names.length
+                  ? 'READY TO PICK A PLAYER'
+                  : 'LOAD A LIST TO BEGIN'}
           </div>
         </div>
 
