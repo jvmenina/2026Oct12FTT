@@ -25,6 +25,8 @@
   background: rgba(255, 254, 250, 0.9);
 }
 
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+
 .wordmark {
   display: inline-flex;
   align-items: center;
@@ -76,6 +78,8 @@
 
 .load-button:hover { background: #fff7d8; border-color: #e8c747; transform: translateY(-1px); }
 .load-button span { font-size: 17px; line-height: 12px; }
+.guide-button { padding: 9px 11px; border: 0; background: transparent; color: #706b60; font: 600 12px var(--sans); cursor: pointer; }
+.guide-button:hover { color: #8d6b03; text-decoration: underline; }
 
 .stage {
   position: relative;
@@ -457,6 +461,69 @@
 .proceed-button span { padding-left: 8px; }
 .proceed-button:disabled { cursor: not-allowed; filter: saturate(.45); opacity: .72; }
 
+/* Mechanics slide layout: keep navigation fixed while the custom details scroll. */
+.mechanics-backdrop { z-index: 11; }
+.mechanics-dialog {
+  width: min(620px, 100%);
+  height: min(590px, calc(100svh - 40px));
+  max-height: calc(100svh - 40px);
+  padding: 38px clamp(24px, 6vw, 52px) 26px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mechanics-heading { flex: 0 0 auto; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding-right: 24px; }
+.mechanics-heading .dialog-kicker { grid-column: 1; }
+.mechanics-number { grid-column: 2; color: #89857a; font: 700 11px var(--mono); }
+.mechanics-dialog h2 { grid-column: 1 / -1; margin: 16px 0 18px; font-size: 32px; }
+.mechanics-details { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 4px 18px 0; color: #625e55; font-size: 15px; line-height: 1.75; }
+.mechanics-details p { margin: 0 0 16px; }
+.mechanics-details strong { color: #302e29; }
+.mechanics-navigation { flex: 0 0 auto; margin-top: 10px; display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+.mechanics-navigation > button { min-width: 40px; height: 40px; padding: 0 12px; border: 1px solid #dedbd2; border-radius: 4px; background: #fffefa; color: #51420f; font: 700 18px var(--sans); cursor: pointer; }
+.mechanics-navigation > button:hover:not(:disabled) { background: #fff3c2; border-color: #d9b32b; }
+.mechanics-navigation > button:disabled { color: #b8b4aa; cursor: default; }
+.mechanics-navigation > .mechanics-start { border-color: #d4a91e; background: #f6cb37; color: #30270e; font: 700 12px var(--sans); }
+.mechanics-navigation > .mechanics-start span { padding-left: 7px; }
+.mechanics-dots { display: flex; justify-content: center; gap: 7px; }
+.mechanics-dots span { width: 7px; height: 7px; border-radius: 50%; background: #ded8c7; }
+.mechanics-dots span.active { background: #d2a816; box-shadow: 0 0 0 3px rgba(210, 168, 22, .16); }
+
+.mechanics-details .sample {
+  border-radius: 4px;
+  background: #fff9df;
+  border: 1px solid #d9b32b;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.mechanics-details .sample img { border-radius: 4px; border: 1px solid #d9b32b; }
+.mechanics-details .sample-answer p { display: block; margin-bottom: 3px; color: #987811; font: 700 10px var(--mono); letter-spacing: 1px; }
+.mechanics-details .sample-answer strong { font-size: 20pt; }
+
+div:has(> .mechanics-game-title) { display: flex; height: 100%;  flex-direction: column; justify-content: center; }
+.mechanics-game-title { display: flex; justify-content: center; align-items: baseline; }
+.mechanics-game-title p {
+  margin-right: 1rex;
+}
+.mechanics-game-title h1 {
+  margin: 0;
+  font-family: var(--heading);
+  font-size: clamp(42px, 4.5vw, 62px);
+  font-weight: 750;
+  line-height: 0.99;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+.mechanics-game-title h1 em {
+  color: #d5a515;
+  font-family: var(--display);
+  font-weight: 500;
+}
+
 /* Puzzle modal layout and its image, hint, answer, and navigation controls. */
 .puzzle-backdrop { z-index: 12; }
 .puzzle-dialog {
@@ -552,6 +619,8 @@
   .topbar { height: 64px; padding-inline: 18px; }
   .topbar { flex-basis: 64px; }
   .wordmark { font-size: 14px; }
+  .topbar-actions { gap: 2px; }
+  .guide-button { padding: 8px 6px; font-size: 11px; }
   .load-button { padding: 9px 11px; font-size: 12px; }
   .stage { padding: 16px 18px 12px; gap: 10px; }
   .stage::before { width: 115vw; top: 40%; }
@@ -583,6 +652,12 @@
   .dialog { padding: 36px 25px 28px; }
   .dialog h2 { font-size: 31px; }
   .winner-name { font-size: 32px; }
+  .mechanics-dialog { height: min(560px, calc(100svh - 32px)); padding: 34px 22px 22px; }
+  .mechanics-dialog h2 { font-size: 26px; }
+  .mechanics-details { font-size: 13px; }
+  .mechanics-navigation { grid-template-columns: 38px minmax(0, 1fr) auto; gap: 7px; }
+  .mechanics-navigation > button { min-width: 38px; height: 38px; }
+  .mechanics-navigation > .mechanics-start { padding-inline: 9px; font-size: 11px; }
   .puzzle-dialog { padding: 32px 20px 22px; }
   .puzzle-dialog h2 { font-size: 24px; }
   .puzzle-image-frame { max-height: 190px; }
