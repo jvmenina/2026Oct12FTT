@@ -8,7 +8,7 @@ type Puzzle = {
   category: string
   answer: string
   image: string
-  imageDescription: string
+  imageDescription?: string
 }
 
 type PuzzleProgress = {
@@ -25,30 +25,156 @@ type PuzzleSession = {
 const puzzlesByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
   easy: [
     {
-      category: 'Design',
-      answer: 'LAYER',
+      category: 'Popular Phrase, Person or People',
+      answer: 'BAD INFLUENCE',
       image: puzzleImage,
-      imageDescription: 'Two offset layers stacked on top of one another',
     },
     {
-      category: 'Design',
-      answer: 'LAYERING',
+      category: 'Food',
+      answer: 'SCRAMBLED EGGS',
       image: puzzleImage,
-      imageDescription: 'Two offset layers stacked on top of one another',
+    },
+    {
+      category: 'Popular Phrase, Country',
+      answer: 'MADE IN CHINA',
+      image: puzzleImage,
+    },
+    {
+      category: 'Popular Phrase',
+      answer: 'READ BETWEEN THE LINES',
+      image: puzzleImage,
+    },
+    {
+      category: 'Food',
+      answer: 'Trail Mix',
+      image: puzzleImage,
+    },
+    {
+      category: 'Popular Phrase',
+      answer: 'REPEAT AFTER ME',
+      image: puzzleImage,
+    },
+    {
+      category: 'Popular Phrase, Science, Tool',
+      answer: 'MICROSCOPE',
+      image: puzzleImage,
+    },
+    {
+      category: 'Popular Phrase, Verb',
+      answer: 'Update',
+      image: puzzleImage,
+    },
+    {
+      category: 'Nature, Tree',
+      answer: 'Oak',
+      image: puzzleImage,
+    },
+    {
+      category: 'Noun, Workplaces',
+      answer: 'Safety',
+      image: puzzleImage,
+    },
+    {
+      category: 'Countries',
+      answer: 'Britain',
+      image: puzzleImage,
+    },
+    {
+      category: 'Music, Social State, Wellness',
+      answer: 'Harmony',
+      image: puzzleImage,
+    },
+    {
+      category: 'Music, History, Education',
+      answer: 'Classical',
+      image: puzzleImage,
+    },
+    {
+      category: 'Color',
+      answer: 'Pink',
+      image: puzzleImage,
+    },
+    {
+      category: 'Place, Activity',
+      answer: 'Pool',
+      image: puzzleImage,
     },
   ],
   notEasy: [
     {
-      category: 'Design concept',
-      answer: 'STACK',
+      category: 'Religion, Spirituality, Mantra',
+      answer: 'Om',
       image: puzzleImage,
-      imageDescription: 'Two offset layers stacked on top of one another',
     },
     {
-      category: 'Design concept',
-      answer: 'STACKER',
+      category: 'Activity',
+      answer: 'Hobby',
       image: puzzleImage,
-      imageDescription: 'Two offset layers stacked on top of one another',
+    },
+    {
+      category: 'Adjective',
+      answer: 'Jagged',
+      image: puzzleImage,
+    },
+    {
+      category: 'Place, Activity',
+      answer: 'Bank',
+      image: puzzleImage,
+    },
+    {
+      category: 'Person or People, Math, Activity',
+      answer: 'Figure',
+      image: puzzleImage,
+    },
+    {
+      category: 'Activity, Workplaces, Medicine',
+      answer: 'Apply',
+      image: puzzleImage,
+    },
+    {
+      category: 'Food',
+      answer: 'Fillet',
+      image: puzzleImage,
+    },
+    {
+      category: 'Activity',
+      answer: 'Move',
+      image: puzzleImage,
+    },
+    {
+      category: 'Noun, Signages',
+      answer: 'Neon Lights',
+      image: puzzleImage,
+    },
+    {
+      category: 'Popular Phrase, Food',
+      answer: 'Balanced Diet',
+      image: puzzleImage,
+    },
+    {
+      category: 'Popular Phrase, Activity',
+      answer: 'Free For All',
+      image: puzzleImage,
+    },
+    {
+      category: 'Science, Medicine',
+      answer: 'Forensics',
+      image: puzzleImage,
+    },
+    {
+      category: 'Nature',
+      answer: 'Summer',
+      image: puzzleImage,
+    },
+    {
+      category: 'VERY Popular Phrase',
+      answer: 'Excuse Me',
+      image: puzzleImage,
+    },
+    {
+      category: 'Popular Phrase',
+      answer: 'For Once in my Life',
+      image: puzzleImage,
     },
   ],
 }
@@ -239,7 +365,7 @@ function App() {
       <header className="topbar">
         <a className="wordmark" href="#top" aria-label="Lucky Draw home">
           <span className="wordmark-star" aria-hidden="true">✳</span>
-          <span>LUCKY<span className="wordmark-light">DRAW</span></span>
+          <span>PIC<span className="wordmark-light">SOLVE</span></span>
         </a>
         <button className="load-button" type="button" onClick={() => setShowFileDialog(true)}>
           <span aria-hidden="true">＋</span> Load names
@@ -250,26 +376,26 @@ function App() {
       <section className="stage" id="top">
         <div className="stage-header">
           <div className="stage-copy">
-            <p className="eyebrow"><span /> SELECT A NAME</p>
-            <h1>Choose a<br /><em>name.</em></h1>
-            <p className="stage-description">Scroll and select a name, or pick randomly.</p>
+            <p className="eyebrow"><span /> OCTOBER 2026 FTT</p>
+            <h1>Pic<em>Solve</em></h1>
+            {/* <p className="stage-description">Scroll and select a name, or pick randomly.</p> */}
             <div className="entry-summary">
-              <span className="entry-icon" aria-hidden="true">♧</span>
+              <span className="entry-icon" aria-hidden="true">☆</span>
               <span><strong>{names.length}</strong> {names.length === 1 ? 'name' : 'names'} in the draw</span>
-              {names.length > 0 && <button type="button" onClick={() => setShowFileDialog(true)}>Change list</button>}
+              {/* {names.length > 0 && <button type="button" onClick={() => setShowFileDialog(true)}>Change list</button>} */}
             </div>
           </div>
 
           {/* Random draw control stays above the grid with the draw summary. */}
           <div className="stage-action">
-            <button className="spin-button" type="button" onClick={pickRandom} disabled={!names.length || isRolling}>
+            <button className="spin-button" type="button" onClick={pickRandom} disabled={!names.length || isRolling || screenName.length != 0}>
               <span className="spin-icon" aria-hidden="true">↻</span>
               {isRolling ? 'Picking...' : 'Pick Random'}
               <span className="spin-arrow" aria-hidden="true">→</span>
             </button>
-            <span className="action-note" aria-live="polite">
+            {/* <span className="action-note" aria-live="polite">
               {isRolling ? 'MOVES THROUGH THE GRID, THEN SLOWS TO A STOP' : 'RANDOMLY SELECT A NAME'}
-            </span>
+            </span> */}
           </div>
         </div>
 
@@ -311,9 +437,9 @@ function App() {
           <div className="wheel-base"><span /><span /><span /><span /><span /></div>
           <div className="wheel-hint">
             {isRolling
-              ? 'MOVING LEFT TO RIGHT, TOP TO BOTTOM · SLOWING TO A STOP'
+              ? 'PICKING NEXT PLAYER...'
               : names.length
-                ? 'BROWSE THE GRID · CLICK A NAME TO SELECT'
+                ? 'READY TO PICK A PLAYER'
                 : 'LOAD A LIST TO BEGIN'}
           </div>
         </div>
@@ -327,7 +453,7 @@ function App() {
         {/* Proceeded selections remain visible until removed from the screen. */}
         {screenName && (
           <div className="screen-selection" aria-live="polite">
-            <span><span className="selection-label">SELECTED</span><strong>{screenName}</strong></span>
+            <span><span className="selection-label">CURRENT PLAYER</span><strong>{screenName}</strong></span>
             <button type="button" onClick={() => setScreenName('')}>Remove</button>
           </div>
         )}
@@ -362,11 +488,11 @@ function App() {
         <div className="modal-backdrop result-backdrop">
           <section className="dialog result-dialog" role="dialog" aria-modal="true" aria-labelledby="result-title">
             <span className="result-spark" aria-hidden="true">✳</span>
-            <span className="dialog-kicker">SELECTED NAME</span>
-            <h2 id="result-title">Selected name</h2>
+            {/* <span className="dialog-kicker">SELECTED NAME</span> */}
+            {/* <h2 id="result-title">Selected name</h2> */}
             <div className="winner-name">{selectedName}</div>
             <div className="result-actions">
-              <button className="proceed-button" type="button" onClick={proceedWithSelection}>Proceed <span aria-hidden="true">→</span></button>
+              <button className="proceed-button" type="button" disabled={screenName.length != 0} onClick={proceedWithSelection}>Proceed <span aria-hidden="true">→</span></button>
               <button type="button" onClick={removeSelectedName}>Remove</button>
               <button type="button" onClick={() => { setSelectedName(''); setSelectedIndex(null) }}>Cancel</button>
             </div>
@@ -397,7 +523,7 @@ function App() {
               </div>
               <h2 id="puzzle-title">What is this <em>word?</em></h2>
               <div className="puzzle-image-frame">
-                <img src={puzzle.image} alt={puzzle.imageDescription} />
+                <img src={puzzle.image} alt={puzzle.imageDescription ?? "Puzzle"} />
               </div>
               <div className="puzzle-hints">
                 <button
