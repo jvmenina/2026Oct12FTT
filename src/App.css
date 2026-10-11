@@ -539,7 +539,7 @@ div:has(> .mechanics-game-title) { display: flex; height: 100%;  flex-direction:
 .puzzle-heading { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; position: relative; }
 .puzzle-heading .dialog-kicker, .puzzle-heading .puzzle-number { position: absolute; }
 .puzzle-heading .puzzle-number { right: 0; }
-.puzzle-number { color: #89857a; font: 700 15px var(--mono); letter-spacing: 1px; }
+.puzzle-number { color: #89857a; font: 700 12px var(--mono); letter-spacing: 1px; }
 .puzzle-dialog h2 { width: 100%; flex: 0 0 100%; margin: 15px 0 18px; font-size: 28px; }
 .puzzle-content { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 .puzzle-image-frame {
@@ -571,8 +571,8 @@ div:has(> .mechanics-game-title) { display: flex; height: 100%;  flex-direction:
 .puzzle-hints button:hover:not(:disabled) { background: #ffedaa; }
 .puzzle-hints button:disabled { color: #8c8260; cursor: default; opacity: .72; }
 .puzzle-hint-display { margin-top: 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; text-align: left; }
-.puzzle-hint-display p { min-width: 0; margin: 0; padding: 9px 11px; border: 1px solid #e8dfc3; border-radius: 3px; background: #fff9e5; color: #514b3a; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
-.puzzle-hint-display p span { display: block; margin-bottom: 3px; color: #987811; font: 700 9px var(--mono); letter-spacing: 1px; }
+.puzzle-hint-display p { min-width: 0; margin: 0; padding: 9px 11px; border: 1px solid #e8dfc3; border-radius: 3px; background: #fff9e5; color: #514b3a; font-size: 15px; line-height: 1.45; overflow-wrap: anywhere; }
+.puzzle-hint-display p span { display: block; color: #987811; font: 700 9px var(--mono); letter-spacing: 1px; }
 .answer-blocks { min-height: 54px; margin-top: 20px; display: flex; align-items: flex-start; justify-content: center; flex-wrap: wrap; column-gap: 40px; row-gap: 10px; }
 .answer-word { max-width: 100%; display: flex; flex: 0 1 auto; flex-wrap: wrap; justify-content: center; gap: 7px; }
 .answer-block {

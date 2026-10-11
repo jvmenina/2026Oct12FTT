@@ -141,7 +141,8 @@ const mechanicsSlides: MechanicsSlide[] = [
   },
 ]
 
-const PUZZLE_SHUFFLE_SEED = 'PicSolve-2026-10-12-++-'
+// NOTE: Disable shuffling for now, uncomment to re-enable
+/* const PUZZLE_SHUFFLE_SEED = 'PicSolve-2026-10-12-++-'
 
 function createSeededRandom(seed: string) {
   let state = 2166136261
@@ -170,7 +171,7 @@ function shufflePuzzles(puzzles: Puzzle[], seed: string): Puzzle[] {
   }
 
   return shuffled
-}
+} */
 
 // Add puzzle entries here to expand either difficulty's puzzle collection.
 const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
@@ -180,6 +181,18 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       answer: 'BAD INFLUENCE',
       hint: 'A person who encourages someone to make poor choices.',
       image: rpBadInfluence,
+    },
+    {
+      category: 'Color',
+      answer: 'Pink',
+      hint: 'A light tint commonly associated with roses and flamingos.',
+      image: fp1wPink,
+    },
+    {
+      category: 'Activity',
+      answer: 'Move',
+      hint: 'Change position or location.',
+      image: fp1wMove,
     },
     {
       category: 'Food',
@@ -192,6 +205,18 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       answer: 'MADE IN CHINA',
       hint: 'A label often found on products imported from overseas.',
       image: rpMadeInChina,
+    },
+    {
+      category: 'Nature, Tree',
+      answer: 'Oak',
+      hint: 'A sturdy tree that produces acorns.',
+      image: fp1wOak,
+    },
+    {
+      category: 'Activity',
+      answer: 'Hobby',
+      hint: 'A pastime someone enjoys in their free time.',
+      image: fp1wHobby,
     },
     {
       category: 'Popular Phrase',
@@ -212,10 +237,10 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       image: rpRepeatAfterMe,
     },
     {
-      category: 'Popular Phrase, Science, Tool',
-      answer: 'MICROSCOPE',
-      hint: 'A tool that makes very small things easier to see.',
-      image: rpMicroscope,
+      category: 'Countries',
+      answer: 'Britain',
+      hint: 'An island nation that includes England, Scotland, and Wales.',
+      image: fp1wBritain,
     },
     {
       category: 'Popular Phrase, Verb',
@@ -224,40 +249,10 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       image: rpUpdate,
     },
     {
-      category: 'Nature, Tree',
-      answer: 'Oak',
-      hint: 'A sturdy tree that produces acorns.',
-      image: fp1wOak,
-    },
-    {
       category: 'Noun, Workplaces',
       answer: 'Safety',
       hint: 'The condition of being protected from danger at work.',
       image: fp1wSafety,
-    },
-    {
-      category: 'Countries',
-      answer: 'Britain',
-      hint: 'An island nation that includes England, Scotland, and Wales.',
-      image: fp1wBritain,
-    },
-    {
-      category: 'Activity',
-      answer: 'Hobby',
-      hint: 'A pastime someone enjoys in their free time.',
-      image: fp1wHobby,
-    },
-    {
-      category: 'Activity',
-      answer: 'Move',
-      hint: 'Change position or location.',
-      image: fp1wMove,
-    },
-    {
-      category: 'Color',
-      answer: 'Pink',
-      hint: 'A light tint commonly associated with roses and flamingos.',
-      image: fp1wPink,
     },
     {
       category: 'Place, Activity',
@@ -265,13 +260,25 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       hint: 'A place to swim, or a game played with cues and balls.',
       image: fp1wPool,
     },
+    {
+      category: 'Popular Phrase, Science, Tool',
+      answer: 'MICROSCOPE',
+      hint: 'A tool that makes very small things easier to see.',
+      image: rpMicroscope,
+    },
   ],
   notEasy: [
     {
-      category: 'Religion, Spirituality, Mantra',
-      answer: 'Om',
-      hint: 'A sacred sound often chanted during meditation.',
-      image: fp1wOm,
+      category: 'Food',
+      answer: 'Fillet',
+      hint: 'A boneless cut of meat or fish.',
+      image: fp1wFillet,
+    },
+    {
+      category: 'Popular Phrase',
+      answer: 'For Once in my Life',
+      hint: 'A phrase about something happening at least one time.',
+      image: rpForOnceInMyLife,
     },
     {
       category: 'Music, Social State, Wellness',
@@ -280,64 +287,10 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       image: fp1wHarmony,
     },
     {
-      category: 'Adjective',
-      answer: 'Jagged',
-      hint: 'Having rough, sharp, uneven edges.',
-      image: fp1wJagged,
-    },
-    {
-      category: 'Place, Activity',
-      answer: 'Bank',
-      hint: 'A place to deposit money, the land beside a river, or what happens when a plane tilts and rolls to turn in the air.',
-      image: fp1wBank,
-    },
-    {
       category: 'Person or People, Math, Activity',
       answer: 'Figure',
       hint: 'A person, a numerical result, or the act of working something out.',
       image: fp1wFigure,
-    },
-    {
-      category: 'Food',
-      answer: 'Trail Mix',
-      hint: 'A portable snack often made with nuts and dried fruit.',
-      image: rpTrailMix,
-    },
-    {
-      category: 'Food',
-      answer: 'Fillet',
-      hint: 'A boneless cut of meat or fish.',
-      image: fp1wFillet,
-    },
-    {
-      category: 'Music, History, Education',
-      answer: 'Classical',
-      hint: 'A long-established style of orchestral music or the golden age of Greece.',
-      image: fp1wClassical,
-    },
-    {
-      category: 'Noun, Signages',
-      answer: 'Neon Lights',
-      hint: 'Bright glowing signs often seen outside shops.',
-      image: rpNeonLights,
-    },
-    {
-      category: 'Popular Phrase, Food',
-      answer: 'Balanced Diet',
-      hint: 'A way of eating that includes a healthy range of foods.',
-      image: rpBalancedDiet,
-    },
-    {
-      category: 'Popular Phrase, Activity',
-      answer: 'Free For All',
-      hint: 'A chaotic contest with few rules or restrictions.',
-      image: rpFreeForAll,
-    },
-    {
-      category: 'Science, Medicine',
-      answer: 'Forensics',
-      hint: 'Scientific methods used to investigate crimes.',
-      image: rpForensics,
     },
     {
       category: 'Nature',
@@ -346,23 +299,73 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
       image: rpSummer,
     },
     {
+      category: 'Food',
+      answer: 'Trail Mix',
+      hint: 'A portable snack often made with nuts and dried fruit.',
+      image: rpTrailMix,
+    },
+    {
+      category: 'Place, Activity',
+      answer: 'Bank',
+      hint: 'A place to deposit money, the land beside a river, or what happens when a plane tilts and rolls to turn in the air.',
+      image: fp1wBank,
+    },
+    {
+      category: 'Noun, Signages',
+      answer: 'Neon Lights',
+      hint: 'Bright glowing signs often seen outside shops.',
+      image: rpNeonLights,
+    },
+    {
       category: 'VERY Popular Phrase',
       answer: 'Excuse Me',
       hint: 'A polite phrase used to get attention or apologize.',
       image: rpExcuseMe,
     },
     {
-      category: 'Popular Phrase',
-      answer: 'For Once in my Life',
-      hint: 'A phrase about something happening at least one time.',
-      image: rpForOnceInMyLife,
+      category: 'Adjective',
+      answer: 'Jagged',
+      hint: 'Having rough, sharp, uneven edges.',
+      image: fp1wJagged,
+    },
+    {
+      category: 'Popular Phrase, Activity',
+      answer: 'Free For All',
+      hint: 'A chaotic contest with few rules or restrictions.',
+      image: rpFreeForAll,
+    },
+    {
+      category: 'Music, History, Education',
+      answer: 'Classical',
+      hint: 'A long-established style of orchestral music or the golden age of Greece.',
+      image: fp1wClassical,
+    },
+    {
+      category: 'Popular Phrase, Food',
+      answer: 'Balanced Diet',
+      hint: 'A way of eating that includes a healthy range of foods.',
+      image: rpBalancedDiet,
+    },
+    {
+      category: 'Science, Medicine',
+      answer: 'Forensics',
+      hint: 'Scientific methods used to investigate crimes.',
+      image: rpForensics,
+    },
+    {
+      category: 'Religion, Spirituality, Mantra',
+      answer: 'Om',
+      hint: 'A sacred sound often chanted during meditation.',
+      image: fp1wOm,
     },
   ],
 }
 
 const puzzlesByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
-  easy: shufflePuzzles(puzzleListsByDifficulty.easy, `${PUZZLE_SHUFFLE_SEED}:easy`),
-  notEasy: shufflePuzzles(puzzleListsByDifficulty.notEasy, `${PUZZLE_SHUFFLE_SEED}:notEasy`),
+  easy: puzzleListsByDifficulty.easy,
+  notEasy: puzzleListsByDifficulty.notEasy,
+  // easy: shufflePuzzles(puzzleListsByDifficulty.easy, `${PUZZLE_SHUFFLE_SEED}:easy`),
+  // notEasy: shufflePuzzles(puzzleListsByDifficulty.notEasy, `${PUZZLE_SHUFFLE_SEED}:notEasy`),
 }
 
 // Render the draw controls, name grid, selection dialogs, and puzzle modals.
@@ -782,7 +785,7 @@ function App() {
               <div className="puzzle-heading">
                 <span className="dialog-kicker">{difficulty === 'easy' ? 'EASY PUZZLE' : 'NOT-EASY PUZZLE'}</span>
                 <span className="puzzle-number">PUZZLE {String(puzzleIndex + 1).padStart(2, '0')} / {String(puzzlesByDifficulty[difficulty].length).padStart(2, '0')}</span>
-                <h2 id="puzzle-title">What is <em>this?</em></h2>
+                <h2 id="puzzle-title">Guess the <em>word / phrase</em></h2>
               </div>
               {/* Image, word-grouped letter tiles, and hints share the scrollable area. */}
               <div className="puzzle-content">
