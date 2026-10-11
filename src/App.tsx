@@ -37,7 +37,7 @@ const fp1wSafety = './4p1w_safety.jpg'
 type PuzzleDifficulty = 'easy' | 'notEasy'
 
 type Puzzle = {
-  category: string
+  keyword: string
   answer: string
   hint: string
   image: string
@@ -46,7 +46,7 @@ type Puzzle = {
 
 type PuzzleProgress = {
   hintShown: boolean
-  categoryShown: boolean
+  keywordShown: boolean
   revealedLetters: number[]
 }
 
@@ -77,17 +77,17 @@ const mechanicsSlides: MechanicsSlide[] = [
     title: 'Game Mechanics I',
     content: <><ol>
         <li>A player is <strong>randomly chosen</strong>. They will answer an <strong>EASY</strong> puzzle.</li>
-        <li>After they answer, they choose the next playe. They will answer a <strong>NOT-EASY</strong> puzzle.</li>
-        <li>Previous player can help in answering the NOT-EASY puzzle, but only using hints.</li>
-        <li>After solving, another player is <strong>randomly chosen</strong> for an <strong>EASY</strong> puzzle.</li>
+        <li>After they answer, they choose the next player. They will answer a <strong>NOT-EASY</strong> puzzle.</li>
+        <li>Previous player can <strong>help</strong> in answering the <strong>NOT-EASY</strong> puzzle, but <strong>only using hints</strong>.</li>
+        <li>After solving, another player is <strong>randomly chosen</strong> for an <strong>EASY</strong> puzzle, who will then choose the next player for a <strong>NOT-EASY</strong> puzzle after answering.</li>
         <li>Loop until done :&#x29;</li>
       </ol></>,
   },
   {
     title: 'Game Mechanics II',
     content: <><ol>
-        <li>Three hints per puzzle: <strong>Category Hint</strong>, <strong>Hint-Hint</strong>, and <strong>Letter Hint</strong>.</li>
-        <li><strong>Category</strong> and the <strong>First Letter</strong> will be given after <strong>45 seconds</strong>.</li>
+        <li>Three hints per puzzle: <strong>Keyword Hint</strong>, <strong>Hint-Hint</strong>, and <strong>Letter Hint</strong>.</li>
+        <li><strong>Keyword</strong> and the <strong>First Letter</strong> will be given after <strong>45 seconds</strong>.</li>
         <li>Answering is limited to <strong>1 minute</strong>.</li>
       </ol></>,
   },
@@ -177,91 +177,91 @@ function shufflePuzzles(puzzles: Puzzle[], seed: string): Puzzle[] {
 const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
   easy: [
     {
-      category: 'Popular Phrase, Person or People',
+      keyword: 'Phrase, Person, People',
       answer: 'BAD INFLUENCE',
       hint: 'A person who encourages someone to make poor choices.',
       image: rpBadInfluence,
     },
     {
-      category: 'Color',
+      keyword: 'Color',
       answer: 'Pink',
       hint: 'A light tint commonly associated with roses and flamingos.',
       image: fp1wPink,
     },
     {
-      category: 'Activity',
+      keyword: 'Activity',
       answer: 'Move',
       hint: 'Change position or location.',
       image: fp1wMove,
     },
     {
-      category: 'Food',
+      keyword: 'Food',
       answer: 'SCRAMBLED EGGS',
       hint: 'A breakfast dish made by stirring eggs as they cook.',
       image: rpScrambled,
     },
     {
-      category: 'Popular Phrase, Country',
+      keyword: 'Phrase, Country',
       answer: 'MADE IN CHINA',
       hint: 'A label often found on products imported from overseas.',
       image: rpMadeInChina,
     },
     {
-      category: 'Nature, Tree',
+      keyword: 'Nature, Tree',
       answer: 'Oak',
       hint: 'A sturdy tree that produces acorns.',
       image: fp1wOak,
     },
     {
-      category: 'Activity',
+      keyword: 'Activity, Favorite, Pastime',
       answer: 'Hobby',
       hint: 'A pastime someone enjoys in their free time.',
       image: fp1wHobby,
     },
     {
-      category: 'Popular Phrase',
+      keyword: 'Phrase, Implication, Meaning',
       answer: 'READ BETWEEN THE LINES',
       hint: 'Look for a meaning that is implied rather than stated.',
       image: rpReadBetween,
     },
     {
-      category: 'Activity, Workplaces, Medicine',
+      keyword: 'Activity, Workplaces, Health, Skincare',
       answer: 'Apply',
       hint: 'Put something to use, or formally request a job.',
       image: fp1wApply,
     },
     {
-      category: 'Popular Phrase',
+      keyword: 'Phrase, Echo, Mimic, Shadow',
       answer: 'REPEAT AFTER ME',
       hint: 'Say the same words immediately after someone else.',
       image: rpRepeatAfterMe,
     },
     {
-      category: 'Countries',
+      keyword: 'Country, Europe',
       answer: 'Britain',
       hint: 'An island nation that includes England, Scotland, and Wales.',
       image: fp1wBritain,
     },
     {
-      category: 'Popular Phrase, Verb',
+      keyword: 'Verb, Noun, Status, Code, Applications',
       answer: 'Update',
       hint: 'Bring something up to date with the latest information.',
       image: rpUpdate,
     },
     {
-      category: 'Noun, Workplaces',
+      keyword: 'Noun, Workplaces, Care, Protection',
       answer: 'Safety',
       hint: 'The condition of being protected from danger at work.',
       image: fp1wSafety,
     },
     {
-      category: 'Place, Activity',
+      keyword: 'Place, Activity, Swim, Game',
       answer: 'Pool',
       hint: 'A place to swim, or a game played with cues and balls.',
       image: fp1wPool,
     },
     {
-      category: 'Popular Phrase, Science, Tool',
+      keyword: 'Phrase, Science, Tool',
       answer: 'MICROSCOPE',
       hint: 'A tool that makes very small things easier to see.',
       image: rpMicroscope,
@@ -269,91 +269,91 @@ const puzzleListsByDifficulty: Record<PuzzleDifficulty, Puzzle[]> = {
   ],
   notEasy: [
     {
-      category: 'Food',
+      keyword: 'Food, Boneless',
       answer: 'Fillet',
       hint: 'A boneless cut of meat or fish.',
       image: fp1wFillet,
     },
     {
-      category: 'Popular Phrase',
+      keyword: 'Phrase, First, Finally, Once',
       answer: 'For Once in my Life',
       hint: 'A phrase about something happening at least one time.',
       image: rpForOnceInMyLife,
     },
     {
-      category: 'Music, Social State, Wellness',
+      keyword: 'Music, Social State, Wellness',
       answer: 'Harmony',
-      hint: 'A pleasing combination of musical notes or people working well together.',
+      hint: 'A pleasing combination of musical notes, a state of balance and peace, or people working well together.',
       image: fp1wHarmony,
     },
     {
-      category: 'Person or People, Math, Activity',
+      keyword: 'Person, People, Thinking, Diagrams, 8, Ice',
       answer: 'Figure',
-      hint: 'A person, a numerical result, or the act of working something out.',
+      hint: 'A person, a numerical result, or the act of solving something.',
       image: fp1wFigure,
     },
     {
-      category: 'Nature',
+      keyword: 'Nature',
       answer: 'Summer',
       hint: 'The warmest season of the year in many regions.',
       image: rpSummer,
     },
     {
-      category: 'Food',
+      keyword: 'Food, Snack, Nuts',
       answer: 'Trail Mix',
       hint: 'A portable snack often made with nuts and dried fruit.',
       image: rpTrailMix,
     },
     {
-      category: 'Place, Activity',
+      keyword: 'Place, Activity',
       answer: 'Bank',
       hint: 'A place to deposit money, the land beside a river, or what happens when a plane tilts and rolls to turn in the air.',
       image: fp1wBank,
     },
     {
-      category: 'Noun, Signages',
+      keyword: 'Noun, Signages, Bright, Retro, Glow',
       answer: 'Neon Lights',
       hint: 'Bright glowing signs often seen outside shops.',
       image: rpNeonLights,
     },
     {
-      category: 'VERY Popular Phrase',
+      keyword: 'Phrase, Sorry, Polite',
       answer: 'Excuse Me',
       hint: 'A polite phrase used to get attention or apologize.',
       image: rpExcuseMe,
     },
     {
-      category: 'Adjective',
+      keyword: 'Adjective, Rough, Sharp',
       answer: 'Jagged',
       hint: 'Having rough, sharp, uneven edges.',
       image: fp1wJagged,
     },
     {
-      category: 'Popular Phrase, Activity',
+      keyword: 'Phrase, Activity, Chaotic, Everyone',
       answer: 'Free For All',
       hint: 'A chaotic contest with few rules or restrictions.',
       image: rpFreeForAll,
     },
     {
-      category: 'Music, History, Education',
+      keyword: 'Music, Genre, History, Education, Greece',
       answer: 'Classical',
       hint: 'A long-established style of orchestral music or the golden age of Greece.',
       image: fp1wClassical,
     },
     {
-      category: 'Popular Phrase, Food',
+      keyword: 'Phrase, Food, Healthy, Eating',
       answer: 'Balanced Diet',
       hint: 'A way of eating that includes a healthy range of foods.',
       image: rpBalancedDiet,
     },
     {
-      category: 'Science, Medicine',
+      keyword: 'Science, Investigation, Crimes',
       answer: 'Forensics',
       hint: 'Scientific methods used to investigate crimes.',
       image: rpForensics,
     },
     {
-      category: 'Religion, Spirituality, Mantra',
+      keyword: 'Religion, Spirituality, Mantra, Meditation',
       answer: 'Om',
       hint: 'A sacred sound often chanted during meditation.',
       image: fp1wOm,
@@ -515,7 +515,7 @@ function App() {
     setShowMechanicsDialog(false)
   }
 
-  // Reveal the category or a chosen answer letter for the active puzzle.
+  // Reveal the keyword or a chosen answer letter for the active puzzle.
   function revealPuzzleHint(
     difficulty: PuzzleDifficulty,
     puzzleIndex: number,
@@ -525,7 +525,7 @@ function App() {
       const session = sessions[difficulty]
       const currentProgress = session.progressByPuzzle[puzzleIndex] ?? {
         hintShown: false,
-        categoryShown: false,
+        keywordShown: false,
         revealedLetters: [],
       }
 
@@ -576,7 +576,7 @@ function App() {
       }
 
       const progress = stepsTaken / totalSteps
-      const delay = 4000 * (0.5 + 1.5 * progress * progress) / totalWeight
+      const delay = 5000 * (0.5 + 1.5 * progress * progress) / totalWeight
       timeoutRef.current = setTimeout(advance, delay)
     }
 
@@ -769,7 +769,7 @@ function App() {
         const puzzle = puzzlesByDifficulty[difficulty][puzzleIndex]
         const progress = session.progressByPuzzle[puzzleIndex] ?? {
           hintShown: false,
-          categoryShown: false,
+          keywordShown: false,
           revealedLetters: [],
         }
         const answerWords = puzzle.answer.toUpperCase().split(' ')
@@ -824,11 +824,11 @@ function App() {
                     )
                   })}
                 </div>
-                {/* Custom and category clues appear together in a compact two-column display. */}
-                {(progress.hintShown || progress.categoryShown) && (
+                {/* Custom and keyword clues appear together in a compact two-column display. */}
+                {(progress.hintShown || progress.keywordShown) && (
                   <div className="puzzle-hint-display" aria-live="polite">
                     {progress.hintShown && <p><span>HINT</span>{puzzle.hint}</p>}
-                    {progress.categoryShown && <p><span>CATEGORY</span>{puzzle.category}</p>}
+                    {progress.keywordShown && <p><span>KEYWORD</span>{puzzle.keyword}</p>}
                   </div>
                 )}
               </div>
@@ -850,10 +850,10 @@ function App() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => revealPuzzleHint(difficulty, puzzleIndex, (current) => ({ ...current, categoryShown: true }))}
-                    disabled={progress.categoryShown}
+                    onClick={() => revealPuzzleHint(difficulty, puzzleIndex, (current) => ({ ...current, keywordShown: true }))}
+                    disabled={progress.keywordShown}
                   >
-                    {progress.categoryShown ? 'Category Shown' : 'Show Category'}
+                    {progress.keywordShown ? 'Keyword Shown' : 'Show Keyword'}
                   </button>
                   <button
                     type="button"
